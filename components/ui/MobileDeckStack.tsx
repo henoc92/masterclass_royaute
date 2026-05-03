@@ -5,6 +5,7 @@ import { type Module } from "@/lib/data/modules";
 import { type Bloc } from "@/lib/data/blocs";
 import { ModuleCell } from "@/components/ui/ModuleCell";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { BLOC_THEMES } from "@/lib/blocThemes";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -29,16 +30,24 @@ export function MobileDeckStack({
   active,
   blocNum,
 }: Props) {
+  const theme = BLOC_THEMES[blocNum];
+  const isDark = blocNum !== 1;
+  const eyebrowVariant = isDark ? "paper" : "ink";
+  const sectionStyle = { backgroundColor: theme.bg, ...theme.cssVars } as React.CSSProperties;
+
   return (
     <div className="md:hidden">
       {/* — INTRO DU BLOC — 1 page plein écran */}
-      <section className="snap-start h-svh w-full flex flex-col px-6 pt-20 pb-16 relative bg-[var(--color-paper)]">
+      <section
+        className="snap-start h-svh w-full flex flex-col px-6 pt-20 pb-16 relative"
+        style={sectionStyle}
+      >
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={active ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
         >
-          <Eyebrow num={slideNum} label={`Bloc ${bloc.roman}`} />
+          <Eyebrow num={slideNum} label={`Bloc ${bloc.roman}`} variant={eyebrowVariant} />
         </motion.div>
 
         <div className="flex-1 flex flex-col justify-center">
@@ -91,14 +100,16 @@ export function MobileDeckStack({
 
         {/* Mini progress des 4 blocs */}
         <div className="flex items-center justify-center gap-2 mb-2">
-          {[1, 2, 3, 4].map((n) => (
+          {([1, 2, 3, 4] as const).map((n) => (
             <span
               key={n}
-              className={`block h-1 rounded-full transition-all duration-400 ${
-                n === blocNum
-                  ? "w-5 bg-[var(--color-gold)]"
-                  : "w-1.5 bg-[var(--color-ink-faint)]"
-              }`}
+              className="block h-1 rounded-full transition-all duration-500"
+              style={{
+                width: n === blocNum ? 20 : 6,
+                backgroundColor: n === blocNum
+                  ? "var(--color-gold)"
+                  : "var(--color-ink-faint)",
+              }}
             />
           ))}
         </div>

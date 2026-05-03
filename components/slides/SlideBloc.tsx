@@ -8,6 +8,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
 import { MobileDeckStack } from "@/components/ui/MobileDeckStack";
 import { moduleIconMap } from "@/components/ui/Icons";
+import { BLOC_THEMES } from "@/lib/blocThemes";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -57,9 +58,14 @@ type Props = {
 export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
   const bloc = blocs[blocNum - 1];
   const ms = modules.filter((m) => m.blocNum === blocNum);
+  const theme = BLOC_THEMES[blocNum];
+  const sectionStyle = { ...theme.cssVars } as React.CSSProperties;
 
   return (
-    <section className="relative w-full md:w-screen md:h-screen bg-[var(--color-paper)] text-[var(--color-ink)] md:overflow-hidden snap-start">
+    <section
+      className="relative w-full md:w-screen md:h-screen text-[var(--color-ink)] md:overflow-hidden snap-start"
+      style={{ backgroundColor: theme.bg, ...sectionStyle }}
+    >
       {/* Bande de couleur signature (mobile + desktop) */}
       <BlocFrame blocNum={blocNum} animated={active} />
 
