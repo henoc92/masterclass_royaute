@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { AnimatedText } from "@/components/ui/AnimatedText";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
+import { CrownShield } from "@/components/ui/Icons";
 
 type Props = { active?: boolean };
 
@@ -26,8 +27,16 @@ export function SlideHero({ active = true }: Props) {
         </motion.div>
       </div>
 
-      {/* Titre monumental — typographie EST le hero */}
+      {/* Titre monumental — typographie EST le hero, couronne en signe d'autorité */}
       <div className="flex-1 flex flex-col justify-center px-6 md:px-[10%]">
+        <motion.div
+          className="text-[var(--color-ink)] mb-3 md:mb-5"
+          initial={{ opacity: 0, y: -10, scale: 0.92 }}
+          animate={active ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <CrownShield size={56} strokeWidth={1.1} className="md:[&]:w-[72px] md:[&]:h-[72px]" />
+        </motion.div>
         <h1
           className="font-display italic font-light text-[var(--color-ink)] leading-[0.92]"
           style={{ fontSize: "clamp(4.5rem, 18vw, 15rem)" }}

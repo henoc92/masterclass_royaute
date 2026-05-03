@@ -6,6 +6,7 @@ import { modules, type Session } from "@/lib/data/modules";
 import { blocs } from "@/lib/data/blocs";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
+import { moduleIconMap } from "@/components/ui/Icons";
 
 function BlocHeader({ blocNum, dense = false }: { blocNum: 1 | 2 | 3 | 4; dense?: boolean }) {
   const bloc = blocs[blocNum - 1];
@@ -154,7 +155,7 @@ export function SlideModules({ active = true }: Props) {
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col"
             >
-              <div className="flex items-baseline gap-6">
+              <div className="flex items-start gap-6">
                 <span
                   className="font-display italic font-light text-[var(--color-gold)]"
                   style={{ fontSize: "clamp(4rem, 9vw, 9rem)", lineHeight: 0.9 }}
@@ -162,6 +163,12 @@ export function SlideModules({ active = true }: Props) {
                   {current.num}
                 </span>
                 <div className="flex-1">
+                  <div className="text-[var(--color-ink)] mb-3">
+                    {(() => {
+                      const Icon = moduleIconMap[current.icon];
+                      return <Icon size={42} strokeWidth={1.1} />;
+                    })()}
+                  </div>
                   <h3
                     className="font-display italic font-light text-[var(--color-ink)]"
                     style={{ fontSize: "clamp(1.6rem, 2.6vw, 2.4rem)", lineHeight: 1.1 }}
@@ -248,12 +255,17 @@ function MobileModulesStrip() {
         className="flex-1 flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
         style={{ scrollbarWidth: "none" }}
       >
-        {modules.map((m) => (
+        {modules.map((m) => {
+          const Icon = moduleIconMap[m.icon];
+          return (
           <article
             key={m.num}
             className="snap-center shrink-0 w-screen flex flex-col overflow-y-auto px-6 pb-2 scrollbar-hide"
             style={{ scrollbarWidth: "none" }}
           >
+            <div className="text-[var(--color-ink)] mb-3">
+              <Icon size={36} strokeWidth={1.1} />
+            </div>
             <div className="flex items-baseline gap-4 mb-3">
               <span
                 className="font-display italic text-[var(--color-gold)] tabular-nums"
@@ -281,7 +293,8 @@ function MobileModulesStrip() {
               ))}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       {/* Compteur + barre de progression */}

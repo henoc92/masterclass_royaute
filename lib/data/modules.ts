@@ -7,12 +7,28 @@ export type Session = {
   points: string[];
 };
 
+export type ModuleIconKey =
+  | "key"
+  | "eyeSpirit"
+  | "arrowHeart"
+  | "harp"
+  | "dove"
+  | "shieldHeart"
+  | "scrollSound"
+  | "mountainAnchor"
+  | "compass"
+  | "team"
+  | "scale"
+  | "columnRoots";
+
 export type Module = {
   num: string;
   blocRoman: string;
   blocNum: 1 | 2 | 3 | 4;
   title: string;
   theme: string;
+  /** Clé du picto associé au module (PDF Masterclass Royauté) */
+  icon: ModuleIconKey;
   sessions: [Session, Session];
 };
 
@@ -23,6 +39,7 @@ export const modules: Module[] = [
     blocNum: 1,
     title: "Introduction à la Royauté",
     theme: "Comprendre ce que Dieu attend de ses dirigeants",
+    icon: "key",
     sessions: [
       {
         num: "1.1",
@@ -49,6 +66,7 @@ export const modules: Module[] = [
     blocNum: 1,
     title: "La Vie est Spirituelle",
     theme: "Le principe fondamental que tout dirigeant doit intégrer",
+    icon: "eyeSpirit",
     sessions: [
       {
         num: "2.1",
@@ -75,6 +93,7 @@ export const modules: Module[] = [
     blocNum: 1,
     title: "Les Bases de l'Élévation Divine (1)",
     theme: "Pourquoi Dieu élève ses dirigeants — Les 5 raisons fondamentales",
+    icon: "arrowHeart",
     sessions: [
       {
         num: "3.1",
@@ -103,6 +122,7 @@ export const modules: Module[] = [
     blocNum: 1,
     title: "Les Bases de l'Élévation Divine (2)",
     theme: "Comment Dieu appelle ses serviteurs — L'exemple de David",
+    icon: "harp",
     sessions: [
       {
         num: "4.1",
@@ -128,6 +148,7 @@ export const modules: Module[] = [
     blocNum: 2,
     title: "Marcher avec le Saint-Esprit",
     theme: "Exigence N°1 — La première et principale exigence de la royauté",
+    icon: "dove",
     sessions: [
       {
         num: "5.1",
@@ -156,6 +177,7 @@ export const modules: Module[] = [
     blocNum: 2,
     title: "Protéger son Cœur",
     theme: "Exigence N°2 — Le plus grand danger et le plus grand atout du dirigeant",
+    icon: "shieldHeart",
     sessions: [
       {
         num: "6.1",
@@ -181,6 +203,7 @@ export const modules: Module[] = [
     blocNum: 2,
     title: "La Parole et les Déclarations",
     theme: "Exigence N°3 — La Parole de Dieu comme fondement et arme du dirigeant",
+    icon: "scrollSound",
     sessions: [
       {
         num: "7.1",
@@ -207,6 +230,7 @@ export const modules: Module[] = [
     blocNum: 2,
     title: "Foi, Persévérance et Puissance",
     theme: "Exigence N°4 — Tenir debout sous la pression",
+    icon: "mountainAnchor",
     sessions: [
       {
         num: "8.1",
@@ -234,6 +258,7 @@ export const modules: Module[] = [
     blocNum: 3,
     title: "Vision, Sagesse et Conseil",
     theme: "Exigence N°5 — Gouverner avec l'intelligence divine",
+    icon: "compass",
     sessions: [
       {
         num: "9.1",
@@ -263,6 +288,7 @@ export const modules: Module[] = [
     blocNum: 3,
     title: "Choisir ses Collaborateurs",
     theme: "Exigence N°6 — L'art de s'entourer selon les critères de Dieu",
+    icon: "team",
     sessions: [
       {
         num: "10.1",
@@ -294,6 +320,7 @@ export const modules: Module[] = [
     blocNum: 4,
     title: "La Gestion de la Gloire (1)",
     theme: "Gérer l'argent, les honneurs et les relations",
+    icon: "scale",
     sessions: [
       {
         num: "11.1",
@@ -321,6 +348,7 @@ export const modules: Module[] = [
     blocNum: 4,
     title: "La Gestion de la Gloire (2)",
     theme: "Fidélité, humilité et durabilité de la royauté",
+    icon: "columnRoots",
     sessions: [
       {
         num: "12.1",

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { AnimatedText } from "@/components/ui/AnimatedText";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
+import { StairsLight } from "@/components/ui/Icons";
 
 type Props = { active?: boolean };
 
@@ -34,11 +35,21 @@ export function SlideCTA({ active = true }: Props) {
 
       {/* Centre : verset fondateur */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 md:px-[14%] text-center">
+        {/* Pictogramme escalier + lumière (clôture symbolique) */}
+        <motion.div
+          className="text-[var(--color-ink)] mb-6 md:mb-8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={active ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <StairsLight size={42} strokeWidth={1.1} />
+        </motion.div>
+
         <motion.span
           className="block h-px bg-[var(--color-gold)] mb-8 md:mb-12"
           initial={{ width: 0 }}
           animate={active ? { width: 48 } : { width: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         />
 
         <h2
