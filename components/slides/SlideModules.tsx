@@ -197,7 +197,7 @@ export function SlideModules({ active = true }: Props) {
                 {isFirstOfBloc && <BlocHeader blocNum={m.blocNum} dense />}
                 <button
                   type="button"
-                  onClick={() => setSelected(isOpen ? -1 : i)}
+                  onClick={() => setSelected(i)}
                   className={`w-full flex items-baseline gap-3 py-2.5 text-left transition-colors ${
                     isOpen ? "text-[var(--color-gold)]" : "text-[var(--color-ink)]"
                   }`}
