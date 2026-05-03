@@ -64,7 +64,7 @@ export function PageRoot() {
       {isMobile === true && <MobileStack onSlideChange={setCurrentSlide} />}
 
       {/* Indicateur permanent — masqué sur la dernière slide (le footer fait office de signal de fin) */}
-      {loaded && currentSlide < 5 && (
+      {loaded && currentSlide < 6 && (
         <motion.div
           className="fixed bottom-6 right-6 md:right-[10%] z-30 flex items-center gap-2 md:gap-3 text-[var(--color-mute)] mix-blend-multiply"
           initial={{ opacity: 0 }}
@@ -75,7 +75,7 @@ export function PageRoot() {
           <span className="font-display italic text-base text-[var(--color-ink)]">
             {String(currentSlide + 1).padStart(2, "0")}
           </span>
-          <span className="eyebrow">/ 06</span>
+          <span className="eyebrow">/ 07</span>
         </motion.div>
       )}
 
@@ -86,7 +86,7 @@ export function PageRoot() {
             className="block h-full bg-[var(--color-gold)] origin-left"
             animate={{
               scaleX: isMobile
-                ? (currentSlide + 1) / 6
+                ? (currentSlide + 1) / 7
                 : (logical + 1) / TOTAL_LOGICAL,
             }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

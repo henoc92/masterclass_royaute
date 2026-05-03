@@ -9,13 +9,16 @@ type Props = {
   onJump?: (slideIdx: number) => void;
 };
 
+const TOTAL = 7;
+
 const labels = [
   { label: "Royauté", short: "01" },
-  { label: "La promesse", short: "02" },
-  { label: "Le parcours", short: "03" },
-  { label: "Le programme", short: "04" },
-  { label: "Le format", short: "05" },
-  { label: "L'invitation", short: "06" },
+  { label: "Vue d'ensemble", short: "02" },
+  { label: "Fondation", short: "03" },
+  { label: "Exigences", short: "04" },
+  { label: "Sagesse", short: "05" },
+  { label: "Gloire", short: "06" },
+  { label: "L'invitation", short: "07" },
 ];
 
 export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
@@ -141,7 +144,7 @@ export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
             {/* Footer overlay */}
             <div className="px-6 md:px-[10%] py-6 flex justify-between items-baseline text-[var(--color-paper)]/50 eyebrow">
               <span>Masterclass · Royauté</span>
-              <span>№ 06 / 06</span>
+              <span>№ {String(TOTAL).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}</span>
             </div>
           </motion.div>
         )}

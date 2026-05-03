@@ -57,17 +57,6 @@ export function SlideHero({ active = true }: Props) {
         </motion.p>
       </div>
 
-      {/* Citation discrète */}
-      <motion.p
-        className="absolute bottom-20 md:bottom-16 left-6 md:left-[10%] right-6 md:right-auto md:max-w-sm font-display italic text-[var(--color-mute)] text-sm md:text-base leading-relaxed"
-        initial={{ opacity: 0 }}
-        animate={active ? { opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 1.4 }}
-      >
-        « Tu as été fait roi.
-        <br className="hidden md:inline" /> Il est temps de régner. »
-      </motion.p>
-
       {/* Mention bas-centre — séparée de l'indicateur slide en bas-droite */}
       <motion.div
         className="absolute bottom-16 md:bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 text-[var(--color-mute)]"
