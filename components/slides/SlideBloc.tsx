@@ -13,6 +13,33 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 type BlocNum = 1 | 2 | 3 | 4;
 
+/**
+ * Bande de couleur signature de chaque bloc.
+ * Chaque bloc a sa propre orientation pour différenciation visuelle :
+ * I  Fondation     → top    (la base)
+ * II Exigences     → left   (la verticale, l'élévation)
+ * III Sagesse      → right  (la balance, l'autre côté)
+ * IV Gloire        → bottom (la culmination)
+ */
+function BlocFrame({ blocNum, animated = true }: { blocNum: BlocNum; animated?: boolean }) {
+  const config = {
+    1: { className: "top-0 left-0 right-0 h-[3px]", initial: { scaleX: 0 }, animate: { scaleX: 1 }, origin: "origin-left" },
+    2: { className: "top-0 bottom-0 left-0 w-[3px]", initial: { scaleY: 0 }, animate: { scaleY: 1 }, origin: "origin-top" },
+    3: { className: "top-0 bottom-0 right-0 w-[3px]", initial: { scaleY: 0 }, animate: { scaleY: 1 }, origin: "origin-top" },
+    4: { className: "bottom-0 left-0 right-0 h-[3px]", initial: { scaleX: 0 }, animate: { scaleX: 1 }, origin: "origin-left" },
+  }[blocNum];
+
+  return (
+    <motion.span
+      aria-hidden
+      className={`absolute z-20 bg-[var(--color-gold)] ${config.className} ${config.origin}`}
+      initial={animated ? config.initial : config.animate}
+      animate={config.animate}
+      transition={{ duration: 1.2, delay: 0.3, ease: EASE }}
+    />
+  );
+}
+
 type Props = {
   active?: boolean;
   blocNum: BlocNum;
@@ -33,6 +60,9 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
 
   return (
     <section className="relative w-full md:w-screen md:h-screen bg-[var(--color-paper)] text-[var(--color-ink)] md:overflow-hidden snap-start">
+      {/* Bande de couleur signature (mobile + desktop) */}
+      <BlocFrame blocNum={blocNum} animated={active} />
+
       {/* — MOBILE — deck of cards module-en-module */}
       <MobileDeckStack
         modules={ms}
