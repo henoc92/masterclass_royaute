@@ -67,9 +67,9 @@ export function SlideHero({ active = true }: Props) {
         </motion.div>
       </div>
 
-      {/* Heure live droite — signature ART_DIRECTION */}
+      {/* Heure live — desktop only (mobile : on dégage pour aérer le header) */}
       <motion.div
-        className="absolute top-12 md:top-16 right-6 md:right-[6%] flex items-center gap-3 text-[var(--color-mute)]"
+        className="hidden md:flex absolute top-16 right-[6%] items-center gap-3 text-[var(--color-mute)]"
         initial={{ opacity: 0, y: 10 }}
         animate={active ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}

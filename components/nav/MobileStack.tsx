@@ -37,7 +37,7 @@ export function MobileStack({ onSlideChange }: Props) {
   }, [onSlideChange]);
 
   return (
-    <main className="md:hidden snap-y snap-proximity overflow-y-scroll overflow-x-hidden min-h-svh w-full scrollbar-hide overscroll-y-contain">
+    <main className="md:hidden snap-y snap-proximity overflow-y-scroll overflow-x-hidden h-svh w-full scrollbar-hide overscroll-y-contain">
       <div data-mobile-slide="0">
         <SlideHero active={active === 0} />
       </div>
