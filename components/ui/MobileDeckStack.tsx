@@ -114,25 +114,58 @@ export function MobileDeckStack({
         </motion.div>
       </section>
 
-      {/* — UNE PAGE PAR MODULE — */}
-      {ms.map((m, i) => (
+      {/* — PAGES MODULES — modules courts (≤2 sessions) regroupés par 2 — */}
+      {chunkModules(ms).map((chunk, pageIdx, pages) => (
         <article
-          key={m.num}
-          className="snap-start min-h-svh w-full flex flex-col px-6 pt-16 pb-16 bg-[var(--color-paper)]"
+          key={chunk.map((m) => m.num).join("-")}
+          className="snap-start min-h-svh w-full flex flex-col px-6 pt-14 pb-12 bg-[var(--color-paper)]"
         >
-          <div className="mb-4 flex items-baseline gap-3">
+          <div className="mb-6 flex items-baseline gap-3">
             <span className="eyebrow text-[var(--color-gold)] tabular-nums">
-              {String(i + 1).padStart(2, "0")} / {String(ms.length).padStart(2, "0")}
+              {String(pageIdx + 1).padStart(2, "0")} / {String(pages.length).padStart(2, "0")}
             </span>
             <span className="block h-px flex-1 bg-[var(--color-ink-line)]" />
-            <span className="eyebrow text-[var(--color-mute)]">
-              Bloc {bloc.roman}
-            </span>
+            <span className="eyebrow text-[var(--color-mute)]">Bloc {bloc.roman}</span>
           </div>
 
-          <ModuleCell module={m} compact withSessions />
+          <div className="flex-1 flex flex-col gap-8">
+            {chunk.map((m, mi) => (
+              <div key={m.num}>
+                {mi > 0 && (
+                  <span className="block h-px w-12 bg-[var(--color-gold)]/40 mb-7" />
+                )}
+                <ModuleCell module={m} compact withSessions />
+              </div>
+            ))}
+          </div>
         </article>
       ))}
     </div>
   );
+}
+
+/**
+ * Groupe les modules courts (≤2 sessions) par 2 sur la même page mobile.
+ * Les modules longs (≥3 sessions) gardent leur propre page.
+ */
+function chunkModules(ms: Module[]): Module[][] {
+  const chunks: Module[][] = [];
+  let buffer: Module[] = [];
+  for (const m of ms) {
+    if (m.sessions.length >= 3) {
+      if (buffer.length > 0) {
+        chunks.push(buffer);
+        buffer = [];
+      }
+      chunks.push([m]);
+    } else {
+      buffer.push(m);
+      if (buffer.length === 2) {
+        chunks.push(buffer);
+        buffer = [];
+      }
+    }
+  }
+  if (buffer.length > 0) chunks.push(buffer);
+  return chunks;
 }
