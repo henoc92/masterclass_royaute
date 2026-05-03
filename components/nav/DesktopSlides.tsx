@@ -13,6 +13,18 @@ import { SlideHero } from "@/components/slides/SlideHero";
 import { SlideOverview } from "@/components/slides/SlideOverview";
 import { SlideBloc } from "@/components/slides/SlideBloc";
 import { SlideCTA } from "@/components/slides/SlideCTA";
+import { BLOC_THEMES } from "@/lib/blocThemes";
+
+// slide index → couleur du rideau de transition
+const SLIDE_CURTAIN: Record<number, string> = {
+  0: "var(--color-ink)",
+  1: "var(--color-ink)",
+  2: BLOC_THEMES[1].bg,
+  3: BLOC_THEMES[2].bg,
+  4: BLOC_THEMES[3].bg,
+  5: BLOC_THEMES[4].bg,
+  6: "var(--color-ink)",
+};
 
 export const SLIDE_COUNT = 7;
 export const TOTAL_LOGICAL = 7;
@@ -63,11 +75,13 @@ export function DesktopSlides({
     onReady?.(goTo);
   }, [goTo, onReady]);
 
-  // Rideau marine — sweep à chaque changement de slide
+  // Rideau coloré — prend la couleur du slide de destination
   const [showCurtain, setShowCurtain] = useState(false);
+  const [curtainColor, setCurtainColor] = useState("var(--color-ink)");
   const lastSlide = useRef(0);
   useEffect(() => {
     if (lastSlide.current !== slide) {
+      setCurtainColor(SLIDE_CURTAIN[slide] ?? "var(--color-ink)");
       lastSlide.current = slide;
       setShowCurtain(true);
       const t = setTimeout(() => setShowCurtain(false), 700);
@@ -109,11 +123,11 @@ export function DesktopSlides({
 
       <motion.div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-30 bg-[var(--color-ink)]"
+        className="pointer-events-none fixed inset-0 z-30"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: showCurtain ? 1 : 0 }}
         transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
-        style={{ originX: showCurtain ? 0 : 1 }}
+        style={{ originX: showCurtain ? 0 : 1, backgroundColor: curtainColor }}
       />
 
       <button
