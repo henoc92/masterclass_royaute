@@ -133,42 +133,129 @@ function MatrixFondation({ modules: ms, active }: { modules: typeof modules; act
   );
 }
 
-// — Bloc II — Escalier ascendant — modules + ligne or qui se trace —
+// — Bloc II — Escalier ascendant — vraies marches visibles —
 function MatrixExigences({ modules: ms, active }: { modules: typeof modules; active: boolean }) {
-  return (
-    <div className="relative max-w-6xl mx-auto pt-8 md:pt-12">
-      {/* Ligne d'escalier (desktop uniquement, signal visuel) */}
-      <motion.svg
-        className="absolute -top-2 left-0 w-full h-12 pointer-events-none hidden md:block"
-        viewBox="0 0 100 14"
-        preserveAspectRatio="none"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={active ? { pathLength: 1, opacity: 0.55 } : {}}
-        transition={{ duration: 1.6, delay: 0.55, ease: EASE }}
-      >
-        <motion.path
-          d="M 4 12 L 26 12 L 26 9 L 50 9 L 50 6 L 74 6 L 74 3 L 96 3"
-          stroke="var(--color-gold)"
-          strokeWidth="0.4"
-          fill="none"
-        />
-      </motion.svg>
+  // Heights des plateformes (px desktop) — chaque module monte de 24px
+  const platforms = [72, 48, 24, 0];
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-y-10 md:gap-y-0 md:gap-x-6 items-end">
-        {ms.map((m, i) => {
-          // Élévation graduelle du Bloc — chaque module monte un peu plus
-          const desktopElevation = ["md:mt-12", "md:mt-8", "md:mt-4", "md:mt-0"][i];
-          return (
-            <div key={m.num} className={desktopElevation}>
+  return (
+    <div className="relative max-w-6xl mx-auto pt-6 md:pt-10">
+      {/* — DESKTOP — vraies marches visibles avec animation séquentielle */}
+      <div className="hidden md:block relative">
+        <svg
+          className="absolute inset-x-0 -top-2 w-full pointer-events-none"
+          style={{ height: "calc(100% + 16px)" }}
+          viewBox="0 0 1000 600"
+          preserveAspectRatio="none"
+        >
+          {/* 4 marches : chaque marche = un riser vertical + une plateforme horizontale */}
+          {[0, 1, 2, 3].map((i) => {
+            const y = 24 + (3 - i) * 24; // 96, 72, 48, 24 (du plus bas au plus haut)
+            const xStart = i * 250;
+            const xEnd = (i + 1) * 250;
+            const prevY = i === 0 ? null : 24 + (3 - (i - 1)) * 24;
+            return (
+              <g key={i}>
+                {/* Riser vertical (sauf pour le 1er) */}
+                {prevY !== null && (
+                  <motion.line
+                    x1={xStart}
+                    y1={prevY}
+                    x2={xStart}
+                    y2={y}
+                    stroke="var(--color-gold)"
+                    strokeWidth="2"
+                    strokeLinecap="square"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={active ? { pathLength: 1, opacity: 0.55 } : {}}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.35 + i * 0.35,
+                      ease: EASE,
+                    }}
+                  />
+                )}
+                {/* Plateforme horizontale */}
+                <motion.line
+                  x1={xStart}
+                  y1={y}
+                  x2={xEnd}
+                  y2={y}
+                  stroke="var(--color-gold)"
+                  strokeWidth="2"
+                  strokeLinecap="square"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={active ? { pathLength: 1, opacity: 0.55 } : {}}
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.4 + i * 0.35 + (prevY !== null ? 0.25 : 0),
+                    ease: EASE,
+                  }}
+                />
+                {/* Marqueur de palier — petit tick au début de la plateforme */}
+                <motion.circle
+                  cx={xStart + 6}
+                  cy={y}
+                  r="3"
+                  fill="var(--color-gold)"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={active ? { opacity: 1, scale: 1 } : {}}
+                  transition={{
+                    duration: 0.4,
+                    delay: 0.7 + i * 0.35,
+                    ease: EASE,
+                  }}
+                />
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* Modules posés sur les marches */}
+        <div className="grid grid-cols-4 gap-x-6 items-end relative pt-6">
+          {ms.map((m, i) => (
+            <div key={m.num} style={{ marginTop: platforms[i] + "px" }}>
               <ModuleCell
                 module={m}
-                delay={active ? 0.4 + i * 0.18 : 0}
+                delay={active ? 0.55 + i * 0.35 : 0}
                 withSessions
                 compact
               />
             </div>
-          );
-        })}
+          ))}
+        </div>
+      </div>
+
+      {/* — MOBILE — empilement vertical avec petits marqueurs de marche */}
+      <div className="md:hidden flex flex-col gap-7">
+        {ms.map((m, i) => (
+          <div key={m.num} className="flex gap-4 items-start">
+            <div className="flex flex-col items-center pt-1 shrink-0">
+              <span
+                className={`block h-2 w-2 rounded-full transition-colors ${
+                  active ? "bg-[var(--color-gold)]" : "bg-[var(--color-ink-faint)]"
+                }`}
+              />
+              {i < ms.length - 1 && (
+                <motion.span
+                  className="block w-px bg-[var(--color-gold)]/50 mt-2 origin-top"
+                  style={{ height: "calc(100% + 14px)" }}
+                  initial={{ scaleY: 0 }}
+                  animate={active ? { scaleY: 1 } : {}}
+                  transition={{ duration: 0.6, delay: 0.4 + i * 0.2, ease: EASE }}
+                />
+              )}
+            </div>
+            <div className="flex-1">
+              <ModuleCell
+                module={m}
+                delay={active ? 0.4 + i * 0.2 : 0}
+                withSessions
+                compact
+              />
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
