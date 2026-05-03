@@ -63,8 +63,8 @@ export function PageRoot() {
 
       {isMobile === true && <MobileStack onSlideChange={setCurrentSlide} />}
 
-      {/* Indicateur permanent */}
-      {loaded && (
+      {/* Indicateur permanent — masqué sur la dernière slide (le footer fait office de signal de fin) */}
+      {loaded && currentSlide < 5 && (
         <motion.div
           className="fixed bottom-6 right-6 md:right-[10%] z-30 flex items-center gap-2 md:gap-3 text-[var(--color-mute)] mix-blend-multiply"
           initial={{ opacity: 0 }}

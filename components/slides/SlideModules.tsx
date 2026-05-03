@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { modules, type Session } from "@/lib/data/modules";
 import { blocs } from "@/lib/data/blocs";
@@ -186,65 +186,136 @@ export function SlideModules({ active = true }: Props) {
         </div>
       </div>
 
-      {/* — MOBILE — accordion vertical */}
-      <div className="md:hidden flex-1 pt-24 pb-32 px-6">
-        <ul className="space-y-1">
-          {modules.map((m, i) => {
-            const isFirstOfBloc = i === 0 || modules[i - 1].blocNum !== m.blocNum;
-            const isOpen = i === selected;
-            return (
-              <li key={m.num}>
-                {isFirstOfBloc && <BlocHeader blocNum={m.blocNum} dense />}
-                <button
-                  type="button"
-                  onClick={() => setSelected(i)}
-                  className={`w-full flex items-baseline gap-3 py-2.5 text-left transition-colors ${
-                    isOpen ? "text-[var(--color-gold)]" : "text-[var(--color-ink)]"
-                  }`}
-                >
-                  <span className="eyebrow opacity-60 tabular-nums shrink-0">{m.num}</span>
-                  <span
-                    className="font-display italic font-light flex-1"
-                    style={{ fontSize: "1.05rem", lineHeight: 1.25 }}
-                  >
-                    {m.title}
-                  </span>
-                  <span
-                    className={`text-xs transition-transform duration-300 ${
-                      isOpen ? "rotate-90 text-[var(--color-gold)]" : "text-[var(--color-mute)]"
-                    }`}
-                  >
-                    →
-                  </span>
-                </button>
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pl-9 pt-2 pb-5 space-y-5">
-                        <p className="font-display italic text-[var(--color-mute)] text-sm leading-snug">
-                          {m.theme}
-                        </p>
-                        <span className="block h-px w-10 bg-[var(--color-gold)]" />
-                        <div className="space-y-5">
-                          {m.sessions.map((s) => (
-                            <SessionBlock key={s.num} session={s} dense />
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {/* — MOBILE — strip swipe horizontal (1 carte par module, pattern app) */}
+      <MobileModulesStrip />
     </section>
+  );
+}
+
+function MobileModulesStrip() {
+  const stripRef = useRef<HTMLDivElement>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const lastIdx = useRef(0);
+
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const i = Math.round(el.scrollLeft / el.clientWidth);
+      if (i !== lastIdx.current && i >= 0 && i < modules.length) {
+        lastIdx.current = i;
+        setActiveIdx(i);
+      }
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollTo = (i: number) => {
+    const el = stripRef.current;
+    if (!el) return;
+    el.scrollTo({ left: el.clientWidth * i, behavior: "smooth" });
+  };
+
+  const current = modules[activeIdx];
+  const bloc = blocs[current.blocNum - 1];
+
+  return (
+    <div className="md:hidden flex-1 flex flex-col pt-20 pb-6">
+      {/* Bandeau bloc actuel — change avec le swipe */}
+      <div className="px-6 mb-4 flex items-baseline gap-3">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={bloc.roman}
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -8 }}
+            transition={{ duration: 0.3 }}
+            className="flex items-baseline gap-3 flex-1"
+          >
+            <span className="font-display italic text-[var(--color-gold)] text-base">
+              {bloc.roman}
+            </span>
+            <span className="block h-px w-7 bg-[var(--color-gold)]/50" />
+            <span className="eyebrow text-[var(--color-gold)]">{bloc.title}</span>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Strip horizontal — une carte par module */}
+      <div
+        ref={stripRef}
+        className="flex-1 flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+        style={{ scrollbarWidth: "none" }}
+      >
+        {modules.map((m) => (
+          <article
+            key={m.num}
+            className="snap-center shrink-0 w-screen flex flex-col overflow-y-auto px-6 pb-2 scrollbar-hide"
+            style={{ scrollbarWidth: "none" }}
+          >
+            <div className="flex items-baseline gap-4 mb-3">
+              <span
+                className="font-display italic text-[var(--color-gold)] tabular-nums"
+                style={{ fontSize: "3.2rem", lineHeight: 0.85 }}
+              >
+                {m.num}
+              </span>
+              <h3
+                className="font-display italic text-[var(--color-ink)] flex-1"
+                style={{ fontSize: "1.35rem", lineHeight: 1.15 }}
+              >
+                {m.title}
+              </h3>
+            </div>
+
+            <p className="font-display italic text-[var(--color-mute)] text-sm leading-snug mb-5 pr-2">
+              {m.theme}
+            </p>
+
+            <span className="block h-px w-12 bg-[var(--color-gold)] mb-5" />
+
+            <div className="space-y-5">
+              {m.sessions.map((s) => (
+                <SessionBlock key={s.num} session={s} dense />
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Compteur + barre de progression */}
+      <div className="px-6 mt-4 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={() => scrollTo(Math.max(0, activeIdx - 1))}
+          disabled={activeIdx === 0}
+          aria-label="Module précédent"
+          className="text-[var(--color-mute)] disabled:opacity-30 transition-opacity"
+        >
+          ←
+        </button>
+        <span className="eyebrow text-[var(--color-gold)] tabular-nums shrink-0">
+          {String(activeIdx + 1).padStart(2, "0")}
+          <span className="text-[var(--color-mute)]"> / 12</span>
+        </span>
+        <div className="flex-1 h-px bg-[var(--color-ink)]/15 relative overflow-hidden">
+          <motion.span
+            className="absolute top-0 left-0 h-full bg-[var(--color-gold)]"
+            animate={{ width: `${((activeIdx + 1) / modules.length) * 100}%` }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => scrollTo(Math.min(modules.length - 1, activeIdx + 1))}
+          disabled={activeIdx === modules.length - 1}
+          aria-label="Module suivant"
+          className="text-[var(--color-mute)] disabled:opacity-30 transition-opacity"
+        >
+          →
+        </button>
+      </div>
+    </div>
   );
 }

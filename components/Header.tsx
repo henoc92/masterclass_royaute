@@ -139,9 +139,9 @@ export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
             </nav>
 
             {/* Footer overlay */}
-            <div className="px-6 md:px-[10%] py-6 grid grid-cols-2 gap-3 text-[var(--color-paper)]/50 eyebrow">
-              <span>contact@masterclass-royaute.com</span>
-              <span className="text-right">№ 06 / 06</span>
+            <div className="px-6 md:px-[10%] py-6 flex justify-between items-baseline text-[var(--color-paper)]/50 eyebrow">
+              <span>Masterclass · Royauté</span>
+              <span>№ 06 / 06</span>
             </div>
           </motion.div>
         )}
