@@ -7,7 +7,7 @@ import {
   KeyRound,
   Wind,
   Heart,
-  Music,
+  UserCheck,
   Bird,
   Flame,
   Shield,
@@ -52,8 +52,8 @@ export const IconEyeSpirit = wrap(Wind);
 /** 03 Élévation 1 — « Dieu cherche des cœurs » → cœur */
 export const IconArrowHeart = wrap(Heart);
 
-/** 04 Élévation 2 — L'exemple de David → harpe (note musicale) */
-export const IconHarp = wrap(Music);
+/** 04 Élévation 2 — « Dieu appelle ses serviteurs » → serviteur choisi/validé */
+export const IconHarp = wrap(UserCheck);
 
 /**
  * 05 Marcher avec le Saint-Esprit — composition Bird + Flame

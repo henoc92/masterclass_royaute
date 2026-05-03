@@ -1,0 +1,138 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { type Module } from "@/lib/data/modules";
+import { type Bloc } from "@/lib/data/blocs";
+import { ModuleCell } from "@/components/ui/ModuleCell";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+type Props = {
+  modules: Module[];
+  bloc: Bloc;
+  slideNum: string;
+  active?: boolean;
+  blocNum: 1 | 2 | 3 | 4;
+};
+
+/**
+ * Mobile : pile snap module-par-module.
+ * Une "intro de bloc" plein écran + une carte par module, chacune en
+ * snap-start full screen — le scroll s'arrête à chaque module, tous
+ * sont garantis visibles.
+ */
+export function MobileDeckStack({
+  modules: ms,
+  bloc,
+  slideNum,
+  active,
+  blocNum,
+}: Props) {
+  return (
+    <div className="md:hidden">
+      {/* — INTRO DU BLOC — 1 page plein écran */}
+      <section className="snap-start h-svh w-full flex flex-col px-6 pt-20 pb-16 relative bg-[var(--color-paper)]">
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={active ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
+        >
+          <Eyebrow num={slideNum} label={`Bloc ${bloc.roman}`} />
+        </motion.div>
+
+        <div className="flex-1 flex flex-col justify-center">
+          <motion.span
+            className="font-display italic text-[var(--color-gold)]"
+            style={{ fontSize: "clamp(3rem, 18vw, 6rem)", lineHeight: 1 }}
+            initial={{ opacity: 0, y: 14 }}
+            animate={active ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.3, ease: EASE }}
+          >
+            {bloc.roman}
+          </motion.span>
+
+          <motion.span
+            className="block h-px bg-[var(--color-gold)] mt-5 mb-6 origin-left"
+            initial={{ width: 0 }}
+            animate={active ? { width: 56 } : {}}
+            transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
+          />
+
+          <motion.h2
+            className="font-display italic text-[var(--color-ink)]"
+            style={{ fontSize: "clamp(2.2rem, 9vw, 3.5rem)", lineHeight: 1.05 }}
+            initial={{ opacity: 0, y: 14 }}
+            animate={active ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
+          >
+            {bloc.title}
+          </motion.h2>
+
+          <motion.p
+            className="mt-4 font-display italic text-[var(--color-mute)]"
+            style={{ fontSize: "1rem", lineHeight: 1.4 }}
+            initial={{ opacity: 0 }}
+            animate={active ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.85 }}
+          >
+            {bloc.subtitle}
+          </motion.p>
+
+          <motion.p
+            className="mt-3 eyebrow text-[var(--color-mute)] tabular-nums"
+            initial={{ opacity: 0 }}
+            animate={active ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 1 }}
+          >
+            {bloc.modules}
+          </motion.p>
+        </div>
+
+        {/* Mini progress des 4 blocs */}
+        <div className="flex items-center justify-center gap-2 mb-2">
+          {[1, 2, 3, 4].map((n) => (
+            <span
+              key={n}
+              className={`block h-1 rounded-full transition-all duration-400 ${
+                n === blocNum
+                  ? "w-5 bg-[var(--color-gold)]"
+                  : "w-1.5 bg-[var(--color-ink-faint)]"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Hint scroll vers le bas */}
+        <motion.div
+          className="text-center eyebrow text-[var(--color-mute)]"
+          initial={{ opacity: 0 }}
+          animate={active ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 1.2 }}
+        >
+          ↓ {ms.length} modules
+        </motion.div>
+      </section>
+
+      {/* — UNE PAGE PAR MODULE — */}
+      {ms.map((m, i) => (
+        <article
+          key={m.num}
+          className="snap-start min-h-svh w-full flex flex-col px-6 pt-16 pb-16 bg-[var(--color-paper)]"
+        >
+          <div className="mb-4 flex items-baseline gap-3">
+            <span className="eyebrow text-[var(--color-gold)] tabular-nums">
+              {String(i + 1).padStart(2, "0")} / {String(ms.length).padStart(2, "0")}
+            </span>
+            <span className="block h-px flex-1 bg-[var(--color-ink-line)]" />
+            <span className="eyebrow text-[var(--color-mute)]">
+              Bloc {bloc.roman}
+            </span>
+          </div>
+
+          <ModuleCell module={m} compact withSessions />
+        </article>
+      ))}
+    </div>
+  );
+}

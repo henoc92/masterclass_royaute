@@ -48,29 +48,30 @@ export function SlideOverview({ active = true, onJumpToBloc }: Props) {
           animate={active ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.35, ease: EASE }}
         >
-          <ClockIcon size={28} strokeWidth={1.2} className="shrink-0 text-[var(--color-ink)]" />
-          <div className="flex flex-1 flex-wrap items-baseline gap-x-3 md:gap-x-6 gap-y-1">
+          <ClockIcon size={24} strokeWidth={1.2} className="shrink-0 text-[var(--color-ink)] md:[&]:w-7 md:[&]:h-7" />
+          <div className="flex flex-1 items-baseline gap-x-1.5 md:gap-x-4 whitespace-nowrap overflow-hidden">
             {STATS.map((s, i) => (
-              <span key={s.label} className="flex items-baseline gap-2">
+              <span key={s.label} className="flex items-baseline gap-1 md:gap-2 whitespace-nowrap">
                 <span
                   className="font-medium text-[var(--color-ink)] tabular-nums"
-                  style={{ fontSize: "clamp(1.1rem, 2vw, 1.6rem)" }}
+                  style={{ fontSize: "clamp(0.95rem, 2vw, 1.6rem)" }}
                 >
                   <Counter
                     target={s.value}
                     prefix={s.prefix ?? ""}
                     active={active}
                     duration={1300}
+                    startWhenVisible={false}
                   />
                 </span>
                 <span
                   className="text-[var(--color-mute)]"
-                  style={{ fontSize: "clamp(0.85rem, 1.2vw, 1rem)" }}
+                  style={{ fontSize: "clamp(0.7rem, 1.2vw, 1rem)" }}
                 >
                   {s.label}
                 </span>
                 {i < STATS.length - 1 && (
-                  <span className="text-[var(--color-ink-faint)] mx-1 md:mx-2">|</span>
+                  <span className="text-[var(--color-ink-faint)] mx-0.5 md:mx-2">·</span>
                 )}
               </span>
             ))}

@@ -6,6 +6,7 @@ import { blocs } from "@/lib/data/blocs";
 import { ModuleCell } from "@/components/ui/ModuleCell";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
+import { MobileDeckStack } from "@/components/ui/MobileDeckStack";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -30,7 +31,18 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
   const ms = modules.filter((m) => m.blocNum === blocNum);
 
   return (
-    <section className="relative min-h-svh md:h-screen w-full md:w-screen flex flex-col bg-[var(--color-paper)] text-[var(--color-ink)] overflow-hidden snap-start">
+    <section className="relative w-full md:w-screen md:h-screen bg-[var(--color-paper)] text-[var(--color-ink)] md:overflow-hidden snap-start">
+      {/* — MOBILE — deck of cards module-en-module */}
+      <MobileDeckStack
+        modules={ms}
+        bloc={bloc}
+        slideNum={slideNum}
+        active={active}
+        blocNum={blocNum}
+      />
+
+      {/* — DESKTOP — matrice fixe avec watermark + eyebrow + progress */}
+      <div className="hidden md:flex md:flex-col md:absolute md:inset-0 md:w-full md:h-full">
       <CornerCross position="tl" />
       <CornerCross position="tr" />
 
@@ -112,6 +124,7 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
         {blocNum === 2 && <MatrixExigences modules={ms} active={active} />}
         {blocNum === 3 && <MatrixSagesse modules={ms} active={active} />}
         {blocNum === 4 && <MatrixGloire modules={ms} active={active} />}
+      </div>
       </div>
     </section>
   );

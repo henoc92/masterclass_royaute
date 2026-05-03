@@ -63,8 +63,9 @@ export function PageRoot() {
 
       {isMobile === true && <MobileStack onSlideChange={setCurrentSlide} />}
 
-      {/* Indicateur permanent — masqué sur la dernière slide (le footer fait office de signal de fin) */}
-      {loaded && currentSlide < 6 && (
+      {/* Indicateur permanent — visible uniquement sur Hero (0) et Vue d'ensemble (1).
+          Masqué sur les blocs (2-5 = ont leurs propres progress dots) et CTA (6 = footer). */}
+      {loaded && currentSlide < 2 && (
         <motion.div
           className="fixed bottom-6 right-6 md:right-[6%] z-30 flex items-center gap-2 md:gap-3 text-[var(--color-mute)] mix-blend-multiply"
           initial={{ opacity: 0 }}
