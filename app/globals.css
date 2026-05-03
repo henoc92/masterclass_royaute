@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* — Palette stricte — 5 couleurs, aucune autre — */
+  --color-paper:        #FAFAF7;  /* fond principal — blanc cassé */
+  --color-ink:          #0A1628;  /* marine profond — texte + rideaux */
+  --color-gold:         #C9A84C;  /* accent — titres clés, états actifs */
+  --color-mute:         #3A4A5C;  /* marine désaturé — texte secondaire */
+
+  /* États dérivés (variations d'opacité uniquement) */
+  --color-ink-soft:     rgba(10, 22, 40, 0.6);
+  --color-ink-faint:    rgba(10, 22, 40, 0.25);
+  --color-ink-line:     rgba(10, 22, 40, 0.12);
+  --color-paper-soft:   rgba(250, 250, 247, 0.6);
+  --color-paper-faint:  rgba(250, 250, 247, 0.25);
+  --color-gold-soft:    rgba(201, 168, 76, 0.5);
+
+  /* Typographie — Instrument Serif (display) + Inter (body) */
+  --font-display:  var(--font-instrument);
+  --font-body:     var(--font-inter);
+
+  /* Easings signature */
+  --ease-soft:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-title:  cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* — Base globale — */
+html {
+  background: var(--color-paper);
+  overscroll-behavior: none;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Curseur custom — desktop only */
+@media (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none;
+  }
+}
+
+/* Reset typographique — Instrument Serif italic pour les titres */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+}
+
+/* Sélection — marine sur or léger */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-paper);
+}
+
+/* Scrollbar discrète mobile */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Utilitaire — eyebrow caps */
+.eyebrow {
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* — Réduction motion — */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

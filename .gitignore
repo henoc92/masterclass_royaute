@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# env (confidentiel)
+.env
+.env.*
+!.env.example
+
+# Fichiers internes Claude — ne jamais versionner
+CLAUDE.md
+CLAUDE-*.md
+AGENTS.md
+SESSION_CONTEXT.md
+DICTIONARY.md
+PATTERNS_PRODUCT.md
+PATTERN_SITE_MOBILE_PREMIUM.md
+DIAGNOSTIC_BUILD_MULTIARCH.md
+PATTERNS_BUILD_LOCAL_APPS.md
