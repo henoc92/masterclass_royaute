@@ -42,7 +42,15 @@ export function MobileStack({ onSlideChange }: Props) {
         <SlideHero active={active === 0} />
       </div>
       <div data-mobile-slide="1">
-        <SlideOverview active={active === 1} />
+        <SlideOverview
+          active={active === 1}
+          onJumpToBloc={(blocIdx) => {
+            const target = document.querySelector<HTMLElement>(
+              `[data-mobile-slide="${blocIdx + 2}"]`
+            );
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
       </div>
       <div data-mobile-slide="2">
         <SlideBloc active={active === 2} blocNum={1} slideNum="03" />

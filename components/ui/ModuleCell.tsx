@@ -36,7 +36,8 @@ export function ModuleCell({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay, ease: EASE }}
-      className="flex flex-col"
+      whileHover={{ y: -4 }}
+      className="group flex flex-col cursor-default"
     >
       <div className="text-[var(--color-ink)] mb-3 md:mb-4">
         <Icon size={iconSize} strokeWidth={1.1} />

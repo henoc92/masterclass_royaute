@@ -4,24 +4,25 @@ import { motion } from "framer-motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
 import { ClockIcon, BookOpen, Blocks } from "@/components/ui/Icons";
+import { Counter } from "@/components/ui/Counter";
 import { blocs } from "@/lib/data/blocs";
 
-type Props = { active?: boolean };
+type Props = {
+  active?: boolean;
+  /** Permet de sauter directement à une slide de bloc (index 0-3 → slides 2-5) */
+  onJumpToBloc?: (blocIdx: number) => void;
+};
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const STATS = [
-  { value: "12", label: "modules" },
-  { value: "24", label: "sessions" },
-  { value: "~12", label: "heures" },
-  { value: "4", label: "blocs" },
+  { value: 12, label: "modules" },
+  { value: 24, label: "sessions" },
+  { value: 12, label: "heures", prefix: "~" },
+  { value: 4, label: "blocs" },
 ];
 
-/**
- * Slide 02 — Vue d'ensemble (PDF p2)
- * Stats + verset Apocalypse 1:6 + 4 colonnes parcours.
- */
-export function SlideOverview({ active = true }: Props) {
+export function SlideOverview({ active = true, onJumpToBloc }: Props) {
   return (
     <section className="relative min-h-svh md:h-screen w-full md:w-screen flex flex-col bg-[var(--color-paper)] text-[var(--color-ink)] overflow-hidden snap-start">
       <CornerCross position="tl" />
@@ -29,7 +30,7 @@ export function SlideOverview({ active = true }: Props) {
       <CornerCross position="bl" />
       <CornerCross position="br" />
 
-      <div className="absolute top-12 md:top-16 left-6 md:left-[10%]">
+      <div className="absolute top-12 md:top-16 left-6 md:left-[6%]">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={active ? { opacity: 1, y: 0 } : {}}
@@ -39,9 +40,8 @@ export function SlideOverview({ active = true }: Props) {
         </motion.div>
       </div>
 
-      {/* Bloc principal centré — 3 zones empilées : stats / verset / parcours */}
-      <div className="flex-1 flex flex-col justify-center px-6 md:px-[10%] pt-24 md:pt-28 pb-16 md:pb-24 gap-10 md:gap-16">
-        {/* — ZONE 1 — Stats avec horloge */}
+      <div className="flex-1 flex flex-col justify-center px-6 md:px-[6%] pt-24 md:pt-28 pb-16 md:pb-24 gap-10 md:gap-16">
+        {/* — ZONE 1 — Stats compteurs animés */}
         <motion.div
           className="flex items-center gap-4 md:gap-8 pb-6 md:pb-8 border-b border-[var(--color-ink)]/15"
           initial={{ opacity: 0, y: 14 }}
@@ -56,7 +56,12 @@ export function SlideOverview({ active = true }: Props) {
                   className="font-medium text-[var(--color-ink)] tabular-nums"
                   style={{ fontSize: "clamp(1.1rem, 2vw, 1.6rem)" }}
                 >
-                  {s.value}
+                  <Counter
+                    target={s.value}
+                    prefix={s.prefix ?? ""}
+                    active={active}
+                    duration={1300}
+                  />
                 </span>
                 <span
                   className="text-[var(--color-mute)]"
@@ -107,23 +112,33 @@ export function SlideOverview({ active = true }: Props) {
             <Blocks size={26} strokeWidth={1.1} />
           </div>
 
-          {/* 4 colonnes blocs */}
+          {/* 4 colonnes blocs — cliquables avec hover preview */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-6 md:gap-y-0">
             {blocs.map((b, i) => (
-              <motion.div
+              <motion.button
+                type="button"
                 key={b.roman}
+                onClick={() => onJumpToBloc?.(i)}
                 initial={{ opacity: 0, y: 12 }}
                 animate={active ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.95 + i * 0.1, ease: EASE }}
-                className="relative md:px-4 text-center md:text-left"
+                className="group relative md:px-4 py-3 md:py-4 text-center md:text-left transition-all duration-300 hover:bg-[var(--color-ink)]/[0.02]"
               >
                 {/* Filet vertical de séparation entre colonnes — desktop only */}
                 {i > 0 && (
                   <span className="hidden md:block absolute left-0 top-1 bottom-1 w-px bg-[var(--color-ink)]/15" />
                 )}
-                <p className="eyebrow text-[var(--color-ink)] mb-2">{b.title}</p>
+                <span className="block eyebrow text-[var(--color-gold)] mb-1 opacity-60">
+                  {b.roman}
+                </span>
+                <p className="eyebrow text-[var(--color-ink)] mb-2 group-hover:text-[var(--color-gold)] transition-colors">
+                  {b.title}
+                </p>
                 <p className="text-[var(--color-mute)] text-xs md:text-sm">{b.modules}</p>
-              </motion.div>
+                <span className="block mt-2 md:mt-3 text-[var(--color-gold)] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300 eyebrow">
+                  Explorer →
+                </span>
+              </motion.button>
             ))}
           </div>
         </motion.div>

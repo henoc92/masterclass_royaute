@@ -40,7 +40,7 @@ export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
   return (
     <>
       {/* Header sticky */}
-      <header className="fixed top-0 left-0 right-0 z-40 px-6 md:px-[10%] py-5 flex items-center justify-between mix-blend-difference text-[var(--color-paper)]">
+      <header className="fixed top-0 left-0 right-0 z-40 px-6 md:px-[6%] py-5 flex items-center justify-between mix-blend-difference text-[var(--color-paper)]">
         {/* Logo */}
         <button
           type="button"
@@ -99,7 +99,7 @@ export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
             className="fixed inset-0 z-50 bg-[var(--color-ink)] text-[var(--color-paper)] flex flex-col"
           >
             {/* Header overlay (close button) */}
-            <div className="px-6 md:px-[10%] py-5 flex items-center justify-between">
+            <div className="px-6 md:px-[6%] py-5 flex items-center justify-between">
               <span className="font-display italic text-base md:text-lg">
                 Masterclass · Royauté
               </span>
@@ -115,7 +115,7 @@ export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
             </div>
 
             {/* Liens */}
-            <nav className="flex-1 flex flex-col justify-center gap-2 px-6 md:px-[14%]">
+            <nav className="flex-1 flex flex-col justify-center gap-2 px-6 md:px-[7%]">
               {labels.map((l, i) => (
                 <motion.button
                   key={l.short}
@@ -142,7 +142,7 @@ export function Header({ currentSlide, totalSlides = 6, onJump }: Props) {
             </nav>
 
             {/* Footer overlay */}
-            <div className="px-6 md:px-[10%] py-6 flex justify-between items-baseline text-[var(--color-paper)]/50 eyebrow">
+            <div className="px-6 md:px-[6%] py-6 flex justify-between items-baseline text-[var(--color-paper)]/50 eyebrow">
               <span>Masterclass · Royauté</span>
               <span>№ {String(TOTAL).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}</span>
             </div>

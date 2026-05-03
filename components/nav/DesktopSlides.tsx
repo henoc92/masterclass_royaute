@@ -85,7 +85,10 @@ export function DesktopSlides({
           <SlideHero active={slide === 0 && loaded} />
         </div>
         <div className="w-screen h-screen shrink-0">
-          <SlideOverview active={slide === 1} />
+          <SlideOverview
+            active={slide === 1}
+            onJumpToBloc={(blocIdx) => goTo(blocIdx + 2)}
+          />
         </div>
         <div className="w-screen h-screen shrink-0">
           <SlideBloc active={slide === 2} blocNum={1} slideNum="03" />

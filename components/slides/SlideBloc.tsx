@@ -34,7 +34,19 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
       <CornerCross position="tl" />
       <CornerCross position="tr" />
 
-      <div className="absolute top-12 md:top-16 left-6 md:left-[10%] z-10">
+      {/* Watermark numéro romain en arrière-plan — signature ART_DIRECTION */}
+      <motion.span
+        aria-hidden
+        className="pointer-events-none absolute select-none font-display italic text-[var(--color-ink)] leading-none right-[2%] md:right-[3%] top-1/2 -translate-y-1/2"
+        style={{ fontSize: "clamp(20rem, 42vw, 48rem)", opacity: 0.03 }}
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={active ? { opacity: 0.04, scale: 1 } : {}}
+        transition={{ duration: 1.2, delay: 0.4, ease: EASE }}
+      >
+        {bloc.roman}
+      </motion.span>
+
+      <div className="absolute top-12 md:top-16 left-6 md:left-[6%] z-10">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={active ? { opacity: 1, y: 0 } : {}}
@@ -44,8 +56,29 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
         </motion.div>
       </div>
 
+      {/* Mini progress des 4 blocs — bas centre */}
+      <motion.div
+        className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 text-[var(--color-mute)]"
+        initial={{ opacity: 0 }}
+        animate={active ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
+        {[1, 2, 3, 4].map((n) => (
+          <span key={n} className="flex items-center gap-3">
+            <span
+              className={`block h-px transition-all duration-500 ${
+                n === blocNum ? "w-6 bg-[var(--color-gold)]" : "w-3 bg-[var(--color-ink-faint)]"
+              }`}
+            />
+            <span className={`eyebrow tabular-nums ${n === blocNum ? "text-[var(--color-gold)]" : ""}`}>
+              {n}/4
+            </span>
+          </span>
+        ))}
+      </motion.div>
+
       {/* Header de bloc — pleine largeur, plus discret pour laisser place à la matrice */}
-      <div className="px-6 md:px-[10%] pt-24 md:pt-28">
+      <div className="px-6 md:px-[6%] pt-24 md:pt-28">
         <motion.div
           className="flex items-baseline gap-4 md:gap-6 pb-5 md:pb-6 border-b border-[var(--color-ink)]/15"
           initial={{ opacity: 0, y: 12 }}
@@ -74,7 +107,7 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
       </div>
 
       {/* Matrice — change selon le bloc */}
-      <div className="flex-1 px-6 md:px-[10%] pt-8 md:pt-10 pb-12 md:pb-16 overflow-y-auto scrollbar-hide">
+      <div className="flex-1 px-6 md:px-[6%] pt-8 md:pt-10 pb-12 md:pb-16 overflow-y-auto scrollbar-hide">
         {blocNum === 1 && <MatrixFondation modules={ms} active={active} />}
         {blocNum === 2 && <MatrixExigences modules={ms} active={active} />}
         {blocNum === 3 && <MatrixSagesse modules={ms} active={active} />}

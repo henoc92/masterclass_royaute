@@ -66,7 +66,7 @@ export function PageRoot() {
       {/* Indicateur permanent — masqué sur la dernière slide (le footer fait office de signal de fin) */}
       {loaded && currentSlide < 6 && (
         <motion.div
-          className="fixed bottom-6 right-6 md:right-[10%] z-30 flex items-center gap-2 md:gap-3 text-[var(--color-mute)] mix-blend-multiply"
+          className="fixed bottom-6 right-6 md:right-[6%] z-30 flex items-center gap-2 md:gap-3 text-[var(--color-mute)] mix-blend-multiply"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
