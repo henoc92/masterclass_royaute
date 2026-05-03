@@ -107,7 +107,7 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
       </div>
 
       {/* Matrice — change selon le bloc */}
-      <div className="flex-1 px-6 md:px-[6%] pt-8 md:pt-10 pb-12 md:pb-16 overflow-y-auto scrollbar-hide">
+      <div className="flex-1 px-6 md:px-[6%] pt-8 md:pt-10 pb-20 md:pb-16 md:overflow-y-auto scrollbar-hide">
         {blocNum === 1 && <MatrixFondation modules={ms} active={active} />}
         {blocNum === 2 && <MatrixExigences modules={ms} active={active} />}
         {blocNum === 3 && <MatrixSagesse modules={ms} active={active} />}
