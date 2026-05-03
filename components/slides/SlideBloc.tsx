@@ -7,6 +7,7 @@ import { ModuleCell } from "@/components/ui/ModuleCell";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CornerCross } from "@/components/ui/CornerCross";
 import { MobileDeckStack } from "@/components/ui/MobileDeckStack";
+import { moduleIconMap } from "@/components/ui/Icons";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -130,16 +131,17 @@ export function SlideBloc({ active = true, blocNum, slideNum }: Props) {
   );
 }
 
-// — Bloc I — Grille 2×2 — chaque cellule cascade —
+// — Bloc I — 3 colonnes équilibrées (3 modules après merge 03+04) —
 function MatrixFondation({ modules: ms, active }: { modules: typeof modules; active: boolean }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 md:gap-x-16 gap-y-8 md:gap-y-12 max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 md:gap-x-10 gap-y-8 md:gap-y-0 max-w-6xl mx-auto">
       {ms.map((m, i) => (
         <ModuleCell
           key={m.num}
           module={m}
           delay={active ? 0.45 + i * 0.12 : 0}
           withSessions
+          compact
         />
       ))}
     </div>
@@ -274,21 +276,21 @@ function MatrixExigences({ modules: ms, active }: { modules: typeof modules; act
   );
 }
 
-// — Bloc III — 2 colonnes + filet vertical central —
+// — Bloc III — 2 colonnes resserrées + filet vertical (densifié) —
 function MatrixSagesse({ modules: ms, active }: { modules: typeof modules; active: boolean }) {
   return (
-    <div className="relative max-w-5xl mx-auto pt-6 md:pt-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0 gap-x-12 md:gap-x-20">
+    <div className="relative max-w-3xl mx-auto pt-6 md:pt-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-y-0 gap-x-8 md:gap-x-10">
         {ms.map((m, i) => (
           <ModuleCell
             key={m.num}
             module={m}
             delay={active ? 0.45 + i * 0.18 : 0}
             withSessions
+            compact
           />
         ))}
       </div>
-      {/* Filet vertical central */}
       <motion.span
         className="hidden md:block absolute left-1/2 top-2 bottom-2 w-px bg-[var(--color-gold)]/30 -translate-x-1/2 origin-top"
         initial={{ scaleY: 0 }}
@@ -299,8 +301,95 @@ function MatrixSagesse({ modules: ms, active }: { modules: typeof modules; activ
   );
 }
 
-// — Bloc IV — Empilement vertical + filet horizontal de séparation —
+// — Bloc IV — Module unique centré, 4 sessions en grille dense (1 module après merge 11+12) —
 function MatrixGloire({ modules: ms, active }: { modules: typeof modules; active: boolean }) {
+  const m = ms[0];
+  if (!m) return null;
+  const Icon = moduleIconMap[m.icon];
+  return (
+    <div className="max-w-5xl mx-auto pt-4 md:pt-6">
+      {/* Header module — picto + numéro + titre + thème, layout horizontal */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={active ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, delay: 0.45, ease: EASE }}
+        className="flex items-start gap-5 md:gap-8 pb-6 md:pb-8 mb-6 md:mb-10 border-b border-[var(--color-ink-line)]"
+      >
+        <div className="text-[var(--color-ink)] shrink-0">
+          <Icon size={48} strokeWidth={1.1} />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-baseline gap-3 mb-1">
+            <span
+              className="font-display italic text-[var(--color-gold)] tabular-nums"
+              style={{ fontSize: "1.4rem" }}
+            >
+              {m.num}
+            </span>
+            <span className="text-[var(--color-ink-faint)]">|</span>
+            <h3
+              className="font-display italic text-[var(--color-ink)]"
+              style={{ fontSize: "clamp(1.4rem, 2.4vw, 2rem)", lineHeight: 1.15 }}
+            >
+              {m.title}
+            </h3>
+          </div>
+          <p className="font-display italic text-[var(--color-mute)] text-sm md:text-base">
+            {m.theme}
+          </p>
+        </div>
+      </motion.div>
+
+      {/* 4 sessions en grille 2×2 — chacune avec son lead + points */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 md:gap-x-14 gap-y-7 md:gap-y-9">
+        {m.sessions.map((s, i) => (
+          <motion.div
+            key={s.num}
+            initial={{ opacity: 0, y: 12 }}
+            animate={active ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.65 + i * 0.12, ease: EASE }}
+            className="flex gap-3"
+          >
+            <span className="eyebrow text-[var(--color-gold)] tabular-nums shrink-0 pt-0.5">
+              {s.num}
+            </span>
+            <div className="flex-1">
+              <p
+                className="font-display italic text-[var(--color-ink)] mb-2"
+                style={{ fontSize: "1rem", lineHeight: 1.3 }}
+              >
+                {s.title}
+              </p>
+              {s.lead && (
+                <p className="text-xs italic text-[var(--color-mute)] mb-2">{s.lead}</p>
+              )}
+              <ul className="space-y-1.5">
+                {s.points.map((p, pi) => (
+                  <li
+                    key={pi}
+                    className="flex gap-2.5 text-xs leading-relaxed text-[var(--color-mute)]"
+                  >
+                    <span
+                      aria-hidden
+                      className="inline-flex items-center shrink-0 h-[1.625em]"
+                      style={{ width: "0.7rem" }}
+                    >
+                      <span className="block h-px w-full bg-[var(--color-gold)]/70" />
+                    </span>
+                    <span className="flex-1">{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// — Ancienne version Bloc IV avec 2 modules (gardée commentée pour référence) —
+function _MatrixGloireLegacy({ modules: ms, active }: { modules: typeof modules; active: boolean }) {
   return (
     <div className="flex flex-col gap-10 md:gap-12 max-w-3xl mx-auto pt-4 md:pt-8">
       {ms.map((m, i) => (

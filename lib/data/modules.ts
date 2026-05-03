@@ -29,7 +29,7 @@ export type Module = {
   theme: string;
   /** Clé du picto associé au module (PDF Masterclass Royauté) */
   icon: ModuleIconKey;
-  sessions: [Session, Session];
+  sessions: Session[];
 };
 
 export const modules: Module[] = [
@@ -91,8 +91,8 @@ export const modules: Module[] = [
     num: "03",
     blocRoman: "I",
     blocNum: 1,
-    title: "Les Bases de l'Élévation Divine (1)",
-    theme: "Pourquoi Dieu élève ses dirigeants — Les 5 raisons fondamentales",
+    title: "Les Bases de l'Élévation Divine",
+    theme: "Pourquoi Dieu élève ses dirigeants — L'exemple de David",
     icon: "arrowHeart",
     sessions: [
       {
@@ -114,18 +114,8 @@ export const modules: Module[] = [
           "Manifester sa gloire",
         ],
       },
-    ],
-  },
-  {
-    num: "04",
-    blocRoman: "I",
-    blocNum: 1,
-    title: "Les Bases de l'Élévation Divine (2)",
-    theme: "Comment Dieu appelle ses serviteurs — L'exemple de David",
-    icon: "harp",
-    sessions: [
       {
-        num: "4.1",
+        num: "3.3",
         title: "Dieu appelle des serviteurs, pas des stars",
         points: [
           "Les 3 niveaux de service",
@@ -133,7 +123,7 @@ export const modules: Module[] = [
         ],
       },
       {
-        num: "4.2",
+        num: "3.4",
         title: "L'exemple de David — L'homme selon le cœur de Dieu",
         points: [
           "Amour, humilité, fidélité",
@@ -318,8 +308,8 @@ export const modules: Module[] = [
     num: "11",
     blocRoman: "IV",
     blocNum: 4,
-    title: "La Gestion de la Gloire (1)",
-    theme: "Gérer l'argent, les honneurs et les relations",
+    title: "La Gestion de la Gloire",
+    theme: "Argent, honneurs, fidélité, humilité — durabilité de la royauté",
     icon: "scale",
     sessions: [
       {
@@ -340,18 +330,8 @@ export const modules: Module[] = [
           "Vigilance dans les voyages",
         ],
       },
-    ],
-  },
-  {
-    num: "12",
-    blocRoman: "IV",
-    blocNum: 4,
-    title: "La Gestion de la Gloire (2)",
-    theme: "Fidélité, humilité et durabilité de la royauté",
-    icon: "columnRoots",
-    sessions: [
       {
-        num: "12.1",
+        num: "11.3",
         title: "La fidélité — La clé de l'élévation et du maintien",
         points: [
           "Fidèle dans les petites choses",
@@ -360,7 +340,7 @@ export const modules: Module[] = [
         ],
       },
       {
-        num: "12.2",
+        num: "11.4",
         title: "L'humilité — La racine de toutes les grâces",
         points: [
           "Savoir d'où vient l'élévation",

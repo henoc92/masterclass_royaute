@@ -21,6 +21,7 @@ export function MobileStack({ onSlideChange }: Props) {
   const [active, setActive] = useState(0);
   const mainRef = useRef<HTMLElement>(null);
 
+  const lastIdx = useRef(0);
   useEffect(() => {
     const main = mainRef.current;
     if (!main) return;
@@ -38,7 +39,11 @@ export function MobileStack({ onSlideChange }: Props) {
           idx = Number(s.getAttribute("data-mobile-slide"));
         }
       }
-      setActive((prev) => (prev !== idx ? (onSlideChange?.(idx), idx) : prev));
+      if (idx !== lastIdx.current) {
+        lastIdx.current = idx;
+        setActive(idx);
+        onSlideChange?.(idx);
+      }
     };
 
     main.addEventListener("scroll", onScroll, { passive: true });
